@@ -159,7 +159,7 @@ public class MailServiceImpl implements MailService {
             context.setVariables(valueMap);
             String content = this.templateEngine.process("MailTemplate", context);
             helper.setText(content, true);
-            System.out.println(content);
+            //System.out.println(content);
             // 添加附件
             if (valueMap.get("filePathList") != null) {
                 String[] filePathList = (String[]) valueMap.get("filePathList");
