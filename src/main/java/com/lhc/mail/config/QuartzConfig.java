@@ -5,13 +5,27 @@ import com.lhc.mail.task.TestTask1;
 import com.lhc.mail.task.TestTask2;
 import org.quartz.*;
 
+import org.quartz.spi.JobFactory;
+import org.quartz.spi.TriggerFiredBundle;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
+
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
 
 @Configuration
 public class QuartzConfig {
 
+/*
 
     @Bean
     public JobDetail testQuartz1() {
@@ -42,11 +56,11 @@ public class QuartzConfig {
         //cron方式，每隔5秒执行一次
         return TriggerBuilder.newTrigger().forJob(testQuartz2())
                 .withIdentity("testTask2")
-                .withSchedule(CronScheduleBuilder.cronSchedule("*/15 * * * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("*\/15 * * * * ?"))
                 .build();
     }
+*/
 
-/*
 
     //配置JobFactory
     @Bean
@@ -55,14 +69,13 @@ public class QuartzConfig {
         jobFactory.setApplicationContext(applicationContext);
         return jobFactory;
     }
-    */
-/**
+/*
      * SchedulerFactoryBean这个类的真正作用提供了对org.quartz.Scheduler的创建与配置，并且会管理它的生命周期与Spring同步。
      * org.quartz.Scheduler: 调度器。所有的调度都是由它控制。
      * @param dataSource 为SchedulerFactory配置数据源
      * @param jobFactory 为SchedulerFactory配置JobFactory
-     *//*
 
+*/
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource, JobFactory jobFactory) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
@@ -78,7 +91,7 @@ public class QuartzConfig {
     @Bean
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        propertiesFactoryBean.setLocation(new ClassPathResource("quartz.properties"));
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();
     }
@@ -97,6 +110,5 @@ public class QuartzConfig {
             return job;
         }
     }
-*/
 
 }
